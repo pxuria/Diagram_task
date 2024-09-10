@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.form-btn {
+  @apply w-[calc(100%-8px)] border-none outline-none text-white font-medium text-base transition-all ease-in duration-300 py-2 rounded;
+}
+
+.input-group {
+  @apply flex flex-col gap-3 items-start w-full;
+}
+
+.input-group label {
+  @apply font-medium text-lg select-none;
+}

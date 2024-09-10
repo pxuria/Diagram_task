@@ -7,8 +7,9 @@ export const initialNodes = [
     position: { x: 0, y: 0 },
     data: {
       imageUrl: rira,
-      companyName: "Company Name",
-      customSize: "w-full h-[50px]",
+      companyName: "ریرا فراگیر",
+      customSize: "h-[45px] object-contain",
+      position: "Bottom",
     },
   },
   {
@@ -17,7 +18,8 @@ export const initialNodes = [
     position: { x: 200, y: 250 },
     data: {
       imageUrl: departman1,
-      companyName: "departman 1",
+      companyName: "دپارتمان 1",
+      position: "Top",
     },
   },
   {
@@ -26,7 +28,8 @@ export const initialNodes = [
     position: { x: -200, y: 250 },
     data: {
       imageUrl: departman2,
-      companyName: "departman 2",
+      companyName: "دپارتمان 2",
+      position: "Top",
     },
   },
   {
@@ -35,7 +38,14 @@ export const initialNodes = [
     position: { x: 0, y: 250 },
     data: {
       imageUrl: departman3,
-      companyName: "departman 3",
+      companyName: "دپارتمان 3",
+      position: "Top",
     },
   },
+];
+
+export const initialEdges = [
+  { id: "e1-2", source: "1", target: "2" },
+  { id: "e1-3", source: "1", target: "3" },
+  { id: "e1-4", source: "1", target: "4" },
 ];
