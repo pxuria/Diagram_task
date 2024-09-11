@@ -2,17 +2,45 @@ import { useState } from "react";
 import Diagram from "./components/Diagram";
 import Modal from "./components/UI/Modal";
 import AddCard from "./components/shared/AddCard";
+import { initialEdges, initialNodes } from "./constants";
+import { node, nodeData } from "./types";
 
 const App: React.FC = () => {
   const [toggleModal, setToggleModal] = useState(false);
+  const [nodes, setNodes] = useState<node[]>(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
 
   const toggleHandler = () => setToggleModal((prev) => !prev);
+
+  // Function to add a new node and connect it to the first node
+  const addNewNode = (newNode: nodeData) => {
+    const newNodeId = (nodes.length + 1).toString(); // Generate new ID
+    const newNodePosition = { x: Math.random() * 400, y: Math.random() * 400 }; // Random position
+
+    const nodeToAdd: node = {
+      id: newNodeId,
+      type: "cardNode",
+      position: newNodePosition, // Ensure position is always defined
+      data: {
+        companyName: newNode.companyName,
+        imageUrl: newNode.imageUrl,
+        position: "Top",
+      },
+    };
+
+    setNodes((prevNodes) => [...prevNodes, nodeToAdd]);
+
+    // Add an edge between the new node and the first node (id: "1")
+    setEdges((prevEdges) => [...prevEdges, { id: `e1-${newNodeId}`, source: "1", target: newNodeId }]);
+
+    toggleHandler(); // Close modal after adding the node
+  };
 
   return (
     <>
       {toggleModal && (
         <Modal onClose={toggleHandler}>
-          <AddCard onClose={toggleHandler} />
+          <AddCard onAddCard={addNewNode} onClose={toggleHandler} />
         </Modal>
       )}
       <main>
@@ -35,7 +63,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        <Diagram />
+        <Diagram nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
       </main>
     </>
   );

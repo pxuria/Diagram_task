@@ -1,9 +1,20 @@
-import { addEdge, Background, Handle, Position, ReactFlow, useEdgesState, useNodesState } from "@xyflow/react";
+import {
+  addEdge,
+  applyEdgeChanges,
+  Background,
+  Connection,
+  Edge,
+  EdgeChange,
+  Handle,
+  NodeChange,
+  Position,
+  ReactFlow,
+} from "@xyflow/react";
 import Card from "./shared/Card";
 
 import "@xyflow/react/dist/style.css";
-import { useCallback } from "react";
-import { initialEdges, initialNodes } from "../constants";
+import { useCallback, useMemo } from "react";
+import { node } from "../types";
 
 interface dataProps {
   data: {
@@ -25,23 +36,51 @@ const nodeTypes = {
   ),
 };
 
-export default function Diagram() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+interface DiagramProps {
+  nodes: node[];
+  setNodes: (nodes: node[]) => void;
+  edges: Edge[]; // Use Edge type from React Flow
+  setEdges: (edges: Edge[]) => void;
+}
 
-  // Limit each node to a single connection, irrespective of handle used
+export default function Diagram({ nodes, setNodes, edges, setEdges }: DiagramProps) {
+  const memoizedNodeTypes = useMemo(() => nodeTypes, []);
+
   const onConnect = useCallback(
-    (params) => {
-      setEdges((eds) => {
-        const existingEdge = eds.find(
-          (edge) =>
-            (edge.source === params.source && edge.target === params.target) ||
-            (edge.source === params.target && edge.target === params.source)
-        );
-        if (!existingEdge) {
-          return addEdge(params, eds);
-        }
-        return eds;
+    (params: Connection) => {
+      const newEdges = addEdge(params, edges);
+      setEdges(newEdges);
+    },
+    [edges, setEdges]
+  );
+
+  const handleNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      setNodes((prevNodes) => {
+        const updatedNodes = prevNodes.map((node) => {
+          const change = changes.find((c) => c.id === node.id);
+
+          if (change && change.type === "position" && change.position) {
+            const { x, y } = change.position;
+
+            if (isNaN(x) || isNaN(y)) return node;
+
+            return { ...node, position: { x, y } };
+          }
+
+          return node;
+        });
+
+        return updatedNodes;
+      });
+    },
+    [setNodes]
+  );
+
+  const handleEdgesChange = useCallback(
+    (changes: EdgeChange[]) => {
+      setEdges((prevEdges) => {
+        return applyEdgeChanges(changes, prevEdges);
       });
     },
     [setEdges]
@@ -52,10 +91,10 @@ export default function Diagram() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        onNodesChange={handleNodesChange}
+        onEdgesChange={handleEdgesChange}
         onConnect={onConnect}
-        nodeTypes={nodeTypes}
+        nodeTypes={memoizedNodeTypes}
         fitView
         snapToGrid
         snapGrid={[15, 15]}

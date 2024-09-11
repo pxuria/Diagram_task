@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { nodeData } from "../../types";
 import ImageUploader from "../ImageUploader";
 
 interface Props {
   onClose: () => void;
+  onAddCard: (newNode: nodeData) => void;
 }
 
-const AddCard = ({ onClose }: Props) => {
+const AddCard = ({ onClose, onAddCard }: Props) => {
   const [title, setTitle] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -13,8 +15,8 @@ const AddCard = ({ onClose }: Props) => {
     e.preventDefault();
 
     if (title && imageFile) {
-      // You can process the form data (title and imageFile) here
-      console.log({ title, imageFile });
+      const imageUrl = URL.createObjectURL(imageFile); // Create a temporary URL for the uploaded image
+      onAddCard({ companyName: title, imageUrl, position: "Bottom" }); // Call the function to add a new card
     } else {
       console.log("Please fill out all fields.");
     }
@@ -25,8 +27,8 @@ const AddCard = ({ onClose }: Props) => {
   };
 
   return (
-    <div className="container mx-auto p-14" onSubmit={submitHandler}>
-      <form action="" className="flex flex-col gap-8">
+    <div className="container mx-auto p-14">
+      <form className="flex flex-col gap-8" onSubmit={submitHandler}>
         {/* title */}
         <div className="input-group">
           <label htmlFor="title">عنوان</label>
