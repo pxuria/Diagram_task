@@ -16,15 +16,15 @@ const AddCard = ({ onClose, onAddCard }: Props) => {
     e.preventDefault();
 
     if (title && imageFile && body) {
-      const imageUrl = URL.createObjectURL(imageFile); // Create a temporary URL for the uploaded image
-      onAddCard({ companyName: title, body, imageUrl, position: "Bottom" }); // Call the function to add a new card
+      const imageUrl = URL.createObjectURL(imageFile);
+      onAddCard({ companyName: title, body, imageUrl, position: "Bottom" });
     } else {
       console.log("Please fill out all fields.");
     }
   };
 
   const handleImageUpload = (file: File) => {
-    setImageFile(file); // Save the uploaded file in the form state
+    setImageFile(file);
   };
 
   return (

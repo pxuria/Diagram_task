@@ -39,8 +39,7 @@ const DiagramProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
     setNodes((prevNodes) => [...prevNodes, nodeToAdd]);
 
-    // Add an edge between the new node and the first node (id: "1")
-    const newEdgeId = `e1-${newNodeId}`; // Ensure unique edge ID
+    const newEdgeId = `e1-${newNodeId}`;
     setEdges((prevEdges) => [...prevEdges, { id: newEdgeId, source: "1", target: newNodeId }]);
   };
 

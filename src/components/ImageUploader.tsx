@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 interface Props {
-  onImageUpload: (file: File) => void; // Expecting a function that takes a File
+  onImageUpload: (file: File) => void;
 }
 
 export default function ImageUploader({ onImageUpload }: Props) {
@@ -13,15 +13,14 @@ export default function ImageUploader({ onImageUpload }: Props) {
       const file = acceptedFiles[0];
       const reader = new FileReader();
 
-      // When the file is read, store it temporarily
       reader.onloadend = () => {
         const imageUrl = reader.result as string;
-        setUploadedImage(imageUrl); // Temporarily store the image
-        onImageUpload(file); // Pass the file to parent component
+        setUploadedImage(imageUrl);
+        onImageUpload(file);
       };
 
       if (file) {
-        reader.readAsDataURL(file); // Read file as Data URL
+        reader.readAsDataURL(file);
       }
     },
     [onImageUpload]
