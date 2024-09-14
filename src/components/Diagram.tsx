@@ -1,9 +1,7 @@
 import {
-  addEdge,
   applyEdgeChanges,
   Background,
   Connection,
-  Edge,
   EdgeChange,
   Handle,
   NodeChange,
@@ -13,45 +11,45 @@ import {
 import Card from "./shared/Card";
 
 import "@xyflow/react/dist/style.css";
-import { useCallback, useMemo } from "react";
-import { node } from "../types";
+import { useCallback } from "react";
+import { useDiagram } from "../store/useDiagram";
 
 interface dataProps {
   data: {
     imageUrl: string;
+    body: string;
     companyName: string;
     customSize?: string;
     position: "Bottom" | "Top";
   };
+  id: string;
 }
 
 const nodeTypes = {
-  cardNode: ({ data }: dataProps) => (
-    <div className="react-flow__node-default rounded-lg border-2 border-[#898585] shadow-xl w-[160px] p-0 h-[140px]">
-      <Card imageUrl={data.imageUrl} companyName={data.companyName} customSize={data.customSize} />
-
+  cardNode: ({ data, id }: dataProps) => (
+    <div className="react-flow__node-default rounded-lg border-2 border-[#898585] shadow-xl w-[160px] p-0 h-[180px]">
+      <Card
+        imageUrl={data.imageUrl}
+        companyName={data.companyName}
+        customSize={data.customSize}
+        nodeId={id}
+        body={data.body}
+      />
       <Handle type="source" position={Position[data.position]} />
       <Handle type="target" position={Position[data.position]} />
     </div>
   ),
 };
 
-interface DiagramProps {
-  nodes: node[];
-  setNodes: (nodes: node[]) => void;
-  edges: Edge[]; // Use Edge type from React Flow
-  setEdges: (edges: Edge[]) => void;
-}
-
-export default function Diagram({ nodes, setNodes, edges, setEdges }: DiagramProps) {
-  const memoizedNodeTypes = useMemo(() => nodeTypes, []);
+export default function Diagram() {
+  const { nodes, setNodes, edges, setEdges } = useDiagram();
 
   const onConnect = useCallback(
     (params: Connection) => {
-      const newEdges = addEdge(params, edges);
-      setEdges(newEdges);
+      const newEdge = { ...params, id: `e${params.source}-${params.target}-${Date.now()}` };
+      setEdges((prevEdges) => [...prevEdges, newEdge]);
     },
-    [edges, setEdges]
+    [setEdges]
   );
 
   const handleNodesChange = useCallback(
@@ -62,12 +60,9 @@ export default function Diagram({ nodes, setNodes, edges, setEdges }: DiagramPro
 
           if (change && change.type === "position" && change.position) {
             const { x, y } = change.position;
-
             if (isNaN(x) || isNaN(y)) return node;
-
             return { ...node, position: { x, y } };
           }
-
           return node;
         });
 
@@ -79,9 +74,7 @@ export default function Diagram({ nodes, setNodes, edges, setEdges }: DiagramPro
 
   const handleEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      setEdges((prevEdges) => {
-        return applyEdgeChanges(changes, prevEdges);
-      });
+      setEdges((prevEdges) => applyEdgeChanges(changes, prevEdges));
     },
     [setEdges]
   );
@@ -94,7 +87,7 @@ export default function Diagram({ nodes, setNodes, edges, setEdges }: DiagramPro
         onNodesChange={handleNodesChange}
         onEdgesChange={handleEdgesChange}
         onConnect={onConnect}
-        nodeTypes={memoizedNodeTypes}
+        nodeTypes={nodeTypes}
         fitView
         snapToGrid
         snapGrid={[15, 15]}

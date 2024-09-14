@@ -8,6 +8,7 @@ export const initialNodes = [
     data: {
       imageUrl: rira,
       companyName: "ریرا فراگیر",
+      body: "",
       customSize: "h-[45px] object-contain",
       position: "Bottom",
     },
@@ -19,6 +20,7 @@ export const initialNodes = [
     data: {
       imageUrl: departman1,
       companyName: "دپارتمان 1",
+      body: "",
       position: "Top",
     },
   },
@@ -29,6 +31,7 @@ export const initialNodes = [
     data: {
       imageUrl: departman2,
       companyName: "دپارتمان 2",
+      body: "",
       position: "Top",
     },
   },
@@ -39,6 +42,7 @@ export const initialNodes = [
     data: {
       imageUrl: departman3,
       companyName: "دپارتمان 3",
+      body: "",
       position: "Top",
     },
   },
