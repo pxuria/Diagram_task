@@ -1,6 +1,7 @@
 export interface nodeData extends Record<string, unknown> {
   imageUrl: string;
   companyName: string;
+  body: string;
   customSize?: string;
   position: string;
 }

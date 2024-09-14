@@ -1,7 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { createContext, useState } from "react";
 import { initialEdges, initialNodes } from "../constants";
-import { nodeData } from "../types";
+import { node, nodeData } from "../types";
 
 interface DiagramContextType {
   nodes: Node[];
@@ -18,16 +18,20 @@ const DiagramProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
 
-  const addNewNode = (newNodeData: { companyName: string; imageUrl: string }) => {
-    const newNodeId = `${Date.now()}`; // Use the current timestamp as a unique ID
-    const newNodePosition = { x: Math.random() * 400, y: Math.random() * 400 };
+  const addNewNode = (newNodeData: { companyName: string; imageUrl: string; body: string }) => {
+    const newNodeId = `${Date.now()}`;
 
-    const nodeToAdd: Node = {
+    const lastNode = nodes.reduce((prev, curr) => (prev.position.x > curr.position.x ? prev : curr), nodes[0]);
+    const newX = lastNode ? lastNode.position.x + 200 : 0;
+    const newNodePosition = { x: newX, y: 250 };
+
+    const nodeToAdd: node = {
       id: newNodeId,
       type: "cardNode",
       position: newNodePosition,
       data: {
         companyName: newNodeData.companyName,
+        body: newNodeData.body,
         imageUrl: newNodeData.imageUrl,
         position: "Top",
       },

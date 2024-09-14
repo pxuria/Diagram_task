@@ -9,14 +9,15 @@ interface Props {
 
 const AddCard = ({ onClose, onAddCard }: Props) => {
   const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (title && imageFile) {
+    if (title && imageFile && body) {
       const imageUrl = URL.createObjectURL(imageFile); // Create a temporary URL for the uploaded image
-      onAddCard({ companyName: title, imageUrl, position: "Bottom" }); // Call the function to add a new card
+      onAddCard({ companyName: title, body, imageUrl, position: "Bottom" }); // Call the function to add a new card
     } else {
       console.log("Please fill out all fields.");
     }
@@ -38,6 +39,20 @@ const AddCard = ({ onClose, onAddCard }: Props) => {
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="w-full h-[46px] border-2 border-solid border-primary rounded-md outline-none px-2 text-base"
+            required
+          />
+        </div>
+
+        {/* body text */}
+        <div className="input-group">
+          <label htmlFor="body">متن دپارتمان</label>
+          <input
+            type="text"
+            id="body"
+            name="body"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
             className="w-full h-[46px] border-2 border-solid border-primary rounded-md outline-none px-2 text-base"
             required
           />

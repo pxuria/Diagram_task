@@ -27,7 +27,7 @@ interface dataProps {
 
 const nodeTypes = {
   cardNode: ({ data, id }: dataProps) => (
-    <div className="react-flow__node-default rounded-lg border-2 border-[#898585] shadow-xl w-[160px] p-0 h-[180px]">
+    <div className="react-flow__node-default rounded-lg border-2 border-[#898585] shadow-xl w-[160px] p-0 h-auto">
       <Card
         imageUrl={data.imageUrl}
         companyName={data.companyName}
