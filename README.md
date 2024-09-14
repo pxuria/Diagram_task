@@ -9,12 +9,25 @@
 - **جابجایی نود:** امکان جابجایی نودها در نمودار.
 - **اتصال نودها:** امکان اتصال نودها به یکدیگر با استفاده از لبه‌ها.
 - **مدیریت نودها و لبه‌ها:** ذخیره و مدیریت نودها و لبه‌ها در استیت.
+  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Company Diagram Project
 
-## نصب و راه‌اندازی
+This project is a web application for managing an organizational chart. It is built using React, React Flow, and Tailwind CSS. Users can add new nodes to the diagram, move nodes, and delete existing nodes.
 
-برای نصب و راه‌اندازی پروژه، مراحل زیر را دنبال کنید:
+## Features
 
-1. **کلون کردن مخزن:**
+- **Add New Node:** Allows adding new nodes to the diagram.
+- **Delete Node:** Allows deleting nodes from the diagram.
+- **Move Node:** Enables moving nodes around in the diagram.
+- **Connect Nodes:** Nodes can be connected to each other using edges.
+- **Manage Nodes and Edges:** Nodes and edges are stored and managed in state.
+
+## Installation and Setup
+
+To install and set up the project, follow these steps:
+
+1. **Clone the repository:**
 
    ```bash
    git clone https://github.com/username/repository.git
